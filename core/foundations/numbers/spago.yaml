@@ -1,0 +1,18 @@
+package:
+  name: numbers-algorithms
+  dependencies:
+    - arrays
+    - console
+    - effect
+    - foldable-traversable
+    - prelude
+    - tuples
+  test:
+    main: Test.Main
+    dependencies:
+      - test-unit
+      - numbers
+workspace:
+  packageSet:
+    registry: 80.8.1
+  extraPackages: {}
