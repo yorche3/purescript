@@ -1,0 +1,11 @@
+package:
+  name: hellouser
+  dependencies:
+    - console
+    - effect
+    - prelude
+    - node-readline
+workspace:
+  packageSet:
+    registry: 80.8.1
+  extraPackages: {}

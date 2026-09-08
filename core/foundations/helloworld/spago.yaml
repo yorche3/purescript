@@ -1,0 +1,10 @@
+package:
+  name: helloworld
+  dependencies:
+    - console
+    - effect
+    - prelude
+workspace:
+  packageSet:
+    registry: 80.8.1
+  extraPackages: {}
