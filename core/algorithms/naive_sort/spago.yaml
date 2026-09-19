@@ -1,0 +1,16 @@
+package:
+  name: naive-sort-algorithms
+  dependencies:
+    - console
+    - effect
+    - foldable-traversable
+    - lists
+    - prelude
+  test:
+    main: Test.Main
+    dependencies:
+      - test-unit
+workspace:
+  packageSet:
+    registry: 80.8.1
+  extraPackages: {}
