@@ -1,10 +1,10 @@
 package:
   name: naive-sort-algorithms
   dependencies:
-    - arrays
     - console
     - effect
     - foldable-traversable
+    - lists
     - prelude
   test:
     main: Test.Main

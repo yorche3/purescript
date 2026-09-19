@@ -3,6 +3,7 @@ module Test.NaiveSortTests where
 import Prelude
 
 import Data.Foldable (for_)
+import Data.List (List(..), (:))
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Test.Unit (suite, test)
@@ -12,73 +13,73 @@ import NaiveSort (bubbleSort, insertionSort, selectionSort)
 
 -- Casos de prueba de la especificación 05_Naive_Sort.md
 --
--- Caso nulo omitido: los arrays de PureScript no admiten `null` ni una entrada
+-- Caso nulo omitido: las listas de PureScript no admiten `null` ni una entrada
 -- inválida, así que el caso no es representable y se conservan los 7 casos de la
--- especificación. Al ser los arrays inmutables, cada caso puede usar la
+-- especificación. Al ser las listas inmutables, cada caso puede usar la
 -- constante compartida sin riesgo de contaminar los siguientes.
 
 type TestCase =
   { description :: String
-  , input :: Array Int
-  , expected :: Array Int
+  , input :: List Int
+  , expected :: List Int
   }
 
-standardInput :: Array Int
-standardInput = [ 5, 2, 9, 1, 5, 6 ]
+standardInput :: List Int
+standardInput = 5 : 2 : 9 : 1 : 5 : 6 : Nil
 
-standardOutput :: Array Int
-standardOutput = [ 1, 2, 5, 5, 6, 9 ]
+standardOutput :: List Int
+standardOutput = 1 : 2 : 5 : 5 : 6 : 9 : Nil
 
-sortedInput :: Array Int
-sortedInput = [ 1, 2, 3, 4, 5 ]
+sortedInput :: List Int
+sortedInput = 1 : 2 : 3 : 4 : 5 : Nil
 
-sortedOutput :: Array Int
-sortedOutput = [ 1, 2, 3, 4, 5 ]
+sortedOutput :: List Int
+sortedOutput = 1 : 2 : 3 : 4 : 5 : Nil
 
-reverseInput :: Array Int
-reverseInput = [ 5, 4, 3, 2, 1 ]
+reverseInput :: List Int
+reverseInput = 5 : 4 : 3 : 2 : 1 : Nil
 
-reverseOutput :: Array Int
-reverseOutput = [ 1, 2, 3, 4, 5 ]
+reverseOutput :: List Int
+reverseOutput = 1 : 2 : 3 : 4 : 5 : Nil
 
-identicalInput :: Array Int
-identicalInput = [ 7, 7, 7, 7 ]
+identicalInput :: List Int
+identicalInput = 7 : 7 : 7 : 7 : Nil
 
-identicalOutput :: Array Int
-identicalOutput = [ 7, 7, 7, 7 ]
+identicalOutput :: List Int
+identicalOutput = 7 : 7 : 7 : 7 : Nil
 
-negativeInput :: Array Int
-negativeInput = [ 3, -1, 4, -5, 0 ]
+negativeInput :: List Int
+negativeInput = 3 : (-1) : 4 : (-5) : 0 : Nil
 
-negativeOutput :: Array Int
-negativeOutput = [ -5, -1, 0, 3, 4 ]
+negativeOutput :: List Int
+negativeOutput = (-5) : (-1) : 0 : 3 : 4 : Nil
 
-singleInput :: Array Int
-singleInput = [ 42 ]
+singleInput :: List Int
+singleInput = 42 : Nil
 
-singleOutput :: Array Int
-singleOutput = [ 42 ]
+singleOutput :: List Int
+singleOutput = 42 : Nil
 
-emptyInput :: Array Int
-emptyInput = []
+emptyInput :: List Int
+emptyInput = Nil
 
-emptyOutput :: Array Int
-emptyOutput = []
+emptyOutput :: List Int
+emptyOutput = Nil
 
-cases :: Array TestCase
+cases :: List TestCase
 cases =
-  [ { description: "an unsorted array", input: standardInput, expected: standardOutput }
-  , { description: "an already sorted array", input: sortedInput, expected: sortedOutput }
-  , { description: "a reverse ordered array", input: reverseInput, expected: reverseOutput }
-  , { description: "an array of identical elements", input: identicalInput, expected: identicalOutput }
-  , { description: "an array with negative numbers", input: negativeInput, expected: negativeOutput }
-  , { description: "a single element array", input: singleInput, expected: singleOutput }
-  , { description: "an empty array", input: emptyInput, expected: emptyOutput }
-  ]
+  { description: "an unsorted array", input: standardInput, expected: standardOutput }
+    : { description: "an already sorted array", input: sortedInput, expected: sortedOutput }
+    : { description: "a reverse ordered array", input: reverseInput, expected: reverseOutput }
+    : { description: "an array of identical elements", input: identicalInput, expected: identicalOutput }
+    : { description: "an array with negative numbers", input: negativeInput, expected: negativeOutput }
+    : { description: "a single element array", input: singleInput, expected: singleOutput }
+    : { description: "an empty array", input: emptyInput, expected: emptyOutput }
+    : Nil
 
 -- Helper compartido: recibe la función a probar y el nombre del algoritmo, y
 -- ejecuta todos los casos con un mensaje descriptivo cada uno.
-assertAllCases :: (Array Int -> Array Int) -> String -> Aff Unit
+assertAllCases :: (List Int -> List Int) -> String -> Aff Unit
 assertAllCases sort algorithm =
   for_ cases \testCase -> do
     let

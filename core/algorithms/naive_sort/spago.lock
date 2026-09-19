@@ -5,10 +5,10 @@
         "path": "./",
         "core": {
           "dependencies": [
-            "arrays",
             "console",
             "effect",
             "foldable-traversable",
+            "lists",
             "prelude"
           ]
         },
