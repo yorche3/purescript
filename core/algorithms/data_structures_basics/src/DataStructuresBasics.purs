@@ -64,6 +64,8 @@ data Node
   = Empty
   | Node Int Node
 
+derive instance Eq Node
+
 data LinkedList = LinkedList Node Node Int
 
 data Stack = Stack Node Int
@@ -74,67 +76,108 @@ initNode :: Int -> Node
 initNode value = Node value Empty
 
 getValue :: Node -> Int
-getValue _ = -1
+getValue (Node value _) = value
+getValue Empty = -1
 
 getNext :: Node -> Node
-getNext _ = Empty
+getNext (Node _ next) = next
+getNext Empty = Empty
 
 setNext :: Node -> Node -> Node
-setNext _ _ = Empty
+setNext (Node value _) newNext = Node value newNext
+setNext Empty _ = Empty
 
 initLinkedList :: LinkedList
 initLinkedList = LinkedList Empty Empty 0
 
 getHead :: LinkedList -> Int
-getHead _ = -1
+getHead (LinkedList head _ _) = getValue head
 
 insertHead :: Int -> LinkedList -> LinkedList
-insertHead _ list = list
+insertHead value (LinkedList head tail count) =
+  let newHead = Node value head
+      newTail = if tail == Empty then newHead else tail
+  in LinkedList newHead newTail (count + 1)
 
 insertTail :: Int -> LinkedList -> LinkedList
-insertTail _ list = list
+insertTail value (LinkedList head tail count) =
+  let newNode = Node value Empty
+      newHead = if head == Empty then newNode else head
+      newTail = if tail == Empty then newNode else setNext tail newNode
+  in LinkedList newHead newTail (count + 1)
 
 delete :: Int -> LinkedList -> Tuple LinkedList Boolean
-delete _ list = Tuple list false
+delete value (LinkedList head tail count) =
+  let deleteNode Empty = Empty
+      deleteNode (Node v next) =
+        if v == value then next else Node v (deleteNode next)
+      newHead = deleteNode head
+      newTail = if newHead == Empty then Empty else tail
+      newCount = if newHead == head then count else count - 1
+  in Tuple (LinkedList newHead newTail newCount) (newHead /= head)
 
 isLinkedListEmpty :: LinkedList -> Boolean
-isLinkedListEmpty _ = false
+isLinkedListEmpty (LinkedList _ _ count) = count == 0
 
 linkedListSize :: LinkedList -> Int
-linkedListSize _ = 0
+linkedListSize (LinkedList _ _ count) = count
 
 initStack :: Stack
 initStack = Stack Empty 0
 
 push :: Int -> Stack -> Stack
-push _ stack = stack
+push value (Stack head count) =
+  let newHead = Node value head
+      newCount = count + 1
+  in Stack newHead newCount
 
 pop :: Stack -> Tuple Int Stack
-pop stack = Tuple (-1) stack
+pop (Stack head count) =
+  case head of
+    Empty -> Tuple (-1) (Stack head count)
+    Node value next -> Tuple value (Stack next (count - 1))
 
 peekStack :: Stack -> Int
-peekStack _ = -1
+peekStack (Stack head _) =
+  case head of
+    Empty -> -1
+    Node value _ -> value
 
 isStackEmpty :: Stack -> Boolean
-isStackEmpty _ = false
+isStackEmpty (Stack _ count) = count == 0
 
 stackSize :: Stack -> Int
-stackSize _ = 0
+stackSize (Stack _ count) = count
 
 initQueue :: Queue
 initQueue = Queue Empty Empty 0
 
 enqueue :: Int -> Queue -> Queue
-enqueue _ queue = queue
+enqueue value (Queue head tail count) =
+  let newNode = Node value Empty
+      newHead = if head == Empty then newNode else head
+      newTail = if tail == Empty then newNode else setNext tail newNode
+      newCount = count + 1
+  in Queue newHead newTail newCount
 
 dequeue :: Queue -> Tuple Int Queue
-dequeue queue = Tuple (-1) queue
+dequeue (Queue head tail count) =
+  case head of
+    Empty -> Tuple (-1) (Queue head tail count)
+    Node value next ->
+      let newHead = next
+          newTail = if newHead == Empty then Empty else tail
+          newCount = count - 1
+      in Tuple value (Queue newHead newTail newCount)
 
 peekQueue :: Queue -> Int
-peekQueue _ = -1
+peekQueue (Queue head _ _) =
+  case head of
+    Empty -> -1
+    Node value _ -> value
 
 isQueueEmpty :: Queue -> Boolean
-isQueueEmpty _ = false
+isQueueEmpty (Queue _ _ count) = count == 0
 
 queueSize :: Queue -> Int
-queueSize _ = 0
+queueSize (Queue _ _ count) = count
