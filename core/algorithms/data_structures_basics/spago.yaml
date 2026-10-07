@@ -4,6 +4,7 @@ package:
     - console
     - effect
     - prelude
+    - tuples
   test:
     main: Test.Main
     dependencies: []
