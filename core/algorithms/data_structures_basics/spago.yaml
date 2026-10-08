@@ -1,0 +1,15 @@
+package:
+  name: data-structures-basics
+  dependencies:
+    - console
+    - effect
+    - prelude
+    - tuples
+  test:
+    main: Test.Main
+    dependencies:
+      - test-unit
+workspace:
+  packageSet:
+    registry: 81.3.0
+  extraPackages: {}

@@ -11,6 +11,7 @@ Los módulos de esta fase trabajan sobre **listas** (`Data.List`, tipo `List`), 
 | Módulo | Especificación | Enfoque | Tests | Estado |
 |--------|---------------|---------|:-----:|:------:|
 | [`naive_sort/`](naive_sort/) | [05_Naive_Sort](https://yorche3.github.io/programming_languages/core/algorithms/05_Naive_Sort/) | `spago test` + test-unit | 3 | ✅ |
+| [`data_structures_basics/`](data_structures_basics/) | [06_Data_Structures_Basics](https://yorche3.github.io/programming_languages/core/algorithms/06_Data_Structures_Basics/) | `spago test` + test-unit | 5 | ✅ |
 
 ---
 
@@ -18,15 +19,26 @@ Los módulos de esta fase trabajan sobre **listas** (`Data.List`, tipo `List`), 
 
 ```text
 algorithms/
-└── naive_sort/                      # 05_Naive_Sort
+├── naive_sort/                      # 05_Naive_Sort
+│   ├── spago.yaml                   # Configuración de Spago
+│   ├── spago.lock                   # Resolución de dependencias (versionada)
+│   ├── .gitignore                   # Ignora output/, .spago/ y node_modules/
+│   ├── src/
+│   │   └── NaiveSort.purs           # 3 funciones del contrato + 3 helpers
+│   ├── test/
+│   │   ├── Main.purs                # Punto de entrada de las pruebas
+│   │   └── NaiveSortTests.purs      # 3 tests × 7 casos
+│   └── README.md
+└── data_structures_basics/          # 06_Data_Structures_Basics
     ├── spago.yaml                   # Configuración de Spago
-    ├── spago.lock                   # Resolución de dependencias (versionada)
+    ├── spago.lock                   # Resolución fijada del package set
     ├── .gitignore                   # Ignora output/, .spago/ y node_modules/
     ├── src/
-    │   └── NaiveSort.purs           # 3 funciones del contrato + 3 helpers
+    │   └── DataStructuresBasics.purs # Node, LinkedList, Stack, Queue
     ├── test/
-    │   ├── Main.purs                # Punto de entrada de las pruebas
-    │   └── NaiveSortTests.purs      # 3 tests × 7 casos
+    │   └── Test/
+    │       ├── Main.purs            # Punto de entrada de las pruebas
+    │       └── DataStructuresBasicsTests.purs # 5 tests × 15 casos
     └── README.md
 ```
 
@@ -62,6 +74,10 @@ algorithms/
 ```bash
 # Naive Sort Tests
 cd naive_sort
+spago test
+
+# Data Structures Basics Tests
+cd data_structures_basics
 spago test
 ```
 
