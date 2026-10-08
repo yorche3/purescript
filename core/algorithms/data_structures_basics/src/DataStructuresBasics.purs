@@ -99,20 +99,34 @@ insertHead value (LinkedList head tail count) =
       newTail = if tail == Empty then newHead else tail
   in LinkedList newHead newTail (count + 1)
 
+-- --- appendNode: copia la cadena enlazando el nodo nuevo al final. Hace falta
+-- --- porque los valores son inmutables: la celda de cola está dentro de la
+-- --- cadena que cuelga de la cabeza y no se puede enlazar en el sitio.
+
+appendNode :: Node -> Node -> Node
+appendNode Empty newNode = newNode
+appendNode (Node value next) newNode = Node value (appendNode next newNode)
+
 insertTail :: Int -> LinkedList -> LinkedList
-insertTail value (LinkedList head tail count) =
+insertTail value (LinkedList head _ count) =
   let newNode = Node value Empty
-      newHead = if head == Empty then newNode else head
-      newTail = if tail == Empty then newNode else setNext tail newNode
-  in LinkedList newHead newTail (count + 1)
+      newHead = if head == Empty then newNode else appendNode head newNode
+  in LinkedList newHead newNode (count + 1)
+
+-- --- findTail: última celda de una cadena no vacía.
+
+findTail :: Node -> Node
+findTail Empty = Empty
+findTail (Node value Empty) = Node value Empty
+findTail (Node _ next) = findTail next
 
 delete :: Int -> LinkedList -> Tuple LinkedList Boolean
-delete value (LinkedList head tail count) =
+delete value (LinkedList head _ count) =
   let deleteNode Empty = Empty
       deleteNode (Node v next) =
         if v == value then next else Node v (deleteNode next)
       newHead = deleteNode head
-      newTail = if newHead == Empty then Empty else tail
+      newTail = if newHead == Empty then Empty else findTail newHead
       newCount = if newHead == head then count else count - 1
   in Tuple (LinkedList newHead newTail newCount) (newHead /= head)
 
@@ -153,12 +167,11 @@ initQueue :: Queue
 initQueue = Queue Empty Empty 0
 
 enqueue :: Int -> Queue -> Queue
-enqueue value (Queue head tail count) =
+enqueue value (Queue head _ count) =
   let newNode = Node value Empty
-      newHead = if head == Empty then newNode else head
-      newTail = if tail == Empty then newNode else setNext tail newNode
+      newHead = if head == Empty then newNode else appendNode head newNode
       newCount = count + 1
-  in Queue newHead newTail newCount
+  in Queue newHead newNode newCount
 
 dequeue :: Queue -> Tuple Int Queue
 dequeue (Queue head tail count) =
