@@ -4,6 +4,8 @@ package:
     - console
     - effect
     - prelude
+  run:
+    main: HelloWorld
 workspace:
   packageSet:
     registry: 80.8.1

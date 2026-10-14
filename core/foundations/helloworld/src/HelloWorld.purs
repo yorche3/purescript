@@ -1,4 +1,4 @@
-module Main where
+module HelloWorld where
 
 import Prelude
 
@@ -6,4 +6,4 @@ import Effect (Effect)
 import Effect.Console (log)
 
 main :: Effect Unit
-main = log "Hello, World! from PureScript"
+main = log "Hello, World! from PureScript!"

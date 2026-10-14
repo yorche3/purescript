@@ -12,7 +12,7 @@ Implementación de la especificación [01_Hello_World](https://yorche3.github.io
 | Archivo | Propósito |
 |---------|-----------|
 | [`spago.yaml`](spago.yaml) | Configuración de **Spago 1.x**: nombre del paquete, dependencias (`console`, `effect`, `prelude`) y package set. |
-| [`src/Main.purs`](src/Main.purs) | Código fuente: módulo `Main` con `main` que imprime `"Hello, World! from PureScript"`. |
+| [`src/HelloWorld.purs`](src/HelloWorld.purs) | Código fuente: módulo `HelloWorld` con `main` que imprime `"Hello, World! from PureScript!"`. |
 | [`.gitignore`](.gitignore) | Ignora `output/` y `.spago/` (artefactos de compilación). |
 
 **Estructura de directorios esperada:**
@@ -22,7 +22,7 @@ helloworld/
 ├── spago.yaml       # Configuración de Spago
 ├── .gitignore       # Ignora output/ y .spago/
 ├── src/
-│   └── Main.purs    # Código fuente
+│   └── HelloWorld.purs    # Código fuente
 ├── output/          # JavaScript generado por purs (no versionado)
 └── .spago/          # Package set descargado por Spago (no versionado)
 ```
@@ -43,7 +43,7 @@ helloworld/
    mkdir -p purescript/core/foundations/helloworld/src
    ```
 
-2. Escribir `spago.yaml` y `src/Main.purs`.
+2. Escribir `spago.yaml` y `src/HelloWorld.purs`.
 
 3. No se necesita ningún paso adicional: Spago descarga el package set automáticamente en la primera ejecución.
 
@@ -66,10 +66,10 @@ workspace:
   extraPackages: {}
 ```
 
-### `src/Main.purs` — Módulo principal
+### `src/HelloWorld.purs` — Módulo principal
 
 ```purescript
-module Main where
+module HelloWorld where
 
 import Prelude
 
@@ -77,12 +77,12 @@ import Effect (Effect)
 import Effect.Console (log)
 
 main :: Effect Unit
-main = log "Hello, World! from PureScript"
+main = log "Hello, World! from PureScript!"
 ```
 
 | Elemento | Propósito |
 |----------|-----------|
-| `module Main` | El módulo de entrada debe llamarse `Main`. |
+| `module Main` | El módulo de entrada debe llamarse `HelloWorld`. |
 | `main :: Effect Unit` | Punto de entrada: una función de tipo `Effect Unit` (efecto que devuelve unidad). |
 | `Effect.Console.log` | Imprime en la consola (stdout) con salto de línea al final. |
 
