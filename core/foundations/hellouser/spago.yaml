@@ -1,10 +1,12 @@
 package:
-  name: hellouser
+  name: hello-user
   dependencies:
     - console
     - effect
     - prelude
     - node-readline
+  run:
+    main: HelloUser
 workspace:
   packageSet:
     registry: 80.8.1
