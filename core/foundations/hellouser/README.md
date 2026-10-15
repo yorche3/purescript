@@ -14,7 +14,7 @@ Lee un nombre desde la entrada estándar y saluda al usuario.
 | Archivo | Propósito |
 |---------|-----------|
 | [`spago.yaml`](spago.yaml) | Configuración de **Spago 1.x**: nombre del paquete, dependencias (`console`, `effect`, `prelude`, `node-readline`) y package set. |
-| [`src/Main.purs`](src/Main.purs) | Código fuente: módulo `Main` con `main` que pide un nombre y saluda. |
+| [`src/HelloUser.purs`](src/HelloUser.purs) | Código fuente: módulo `Main` con `main` que pide un nombre y saluda. |
 | [`.gitignore`](.gitignore) | Ignora `output/` y `.spago/` (artefactos de compilación). |
 
 **Estructura de directorios esperada:**
@@ -24,7 +24,7 @@ hellouser/
 ├── spago.yaml       # Configuración de Spago
 ├── .gitignore       # Ignora output/ y .spago/
 ├── src/
-│   └── Main.purs    # Código fuente
+│   └── HelloUser.purs    # Código fuente
 ├── output/          # JavaScript generado por purs (no versionado)
 └── .spago/          # Package set descargado por Spago (no versionado)
 ```
@@ -53,7 +53,7 @@ hellouser/
    mkdir -p purescript/core/foundations/hellouser/src
    ```
 
-2. Escribir `spago.yaml` y `src/Main.purs`.
+2. Escribir `spago.yaml` y `src/HelloUser.purs`.
 
 3. No se necesita ningún paso adicional: Spago descarga el package set automáticamente en la primera ejecución.
 
@@ -77,7 +77,7 @@ workspace:
   extraPackages: {}
 ```
 
-### `src/Main.purs` — Módulo principal
+### `src/HelloUser.purs` — Módulo principal
 
 **ES:** El flujo del programa es:
 
