@@ -23,8 +23,7 @@
 --   - Los valores de prueba son enteros positivos.
 --   - Los identificadores van en inglés y los comentarios en español.
 --
--- Implementación pendiente: la escribe el autor. Esta delegación solo genera el
--- contrato y el esqueleto de todas sus operaciones.
+-- Implementación completa: todas las operaciones resueltas sobre el `Node` común.
 
 module DataStructuresBasics
   ( Node(..)
