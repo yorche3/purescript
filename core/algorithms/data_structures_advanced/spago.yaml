@@ -3,10 +3,12 @@ package:
   dependencies:
     - console
     - effect
+    - maybe
     - prelude
   test:
     main: Test.Main
-    dependencies: []
+    dependencies:
+      - test-unit
 workspace:
   packageSet:
     registry: 82.0.1

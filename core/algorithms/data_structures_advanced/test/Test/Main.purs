@@ -5,8 +5,10 @@ import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
 
+import Test.DataStructuresAdvancedTests as DataStructuresAdvancedTests
+
 main :: Effect Unit
 main = do
-  log "🍕"
-  log "You should add some tests."
+  log "🍝"
+  DataStructuresAdvancedTests.main
 
