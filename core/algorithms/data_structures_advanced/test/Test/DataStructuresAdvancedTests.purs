@@ -274,3 +274,13 @@ main = runTest do
         check "graph: hasEdge(10,10) should succeed" (hasEdge 10 10 graph)
         checkNeighbors "graph" (Just [ 10 ]) 10 graph
         checkCounts "graph" 1 1 graph
+
+      test "neighbour-result isolation" do
+        let
+          base = Just (newGraph # addVertex 10 # addVertex 30 # addVertex 50)
+          g1 = graphOf (edge 10 30 base)
+          saved = getNeighbors 10 g1
+          g2 = graphOf (edge 10 50 (Just g1))
+        check "graph: saved neighbours should remain [30]" (saved == Just [ 30 ])
+        checkNeighbors "graph" (Just [ 30, 50 ]) 10 g2
+        checkCounts "graph" 3 2 g2

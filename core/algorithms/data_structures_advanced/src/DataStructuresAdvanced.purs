@@ -23,9 +23,8 @@
 --     especificación.
 --   - Los contadores devuelven `Int` y la estructura vacía informa 0.
 --
--- Cuerpos centinela: la implementación llega en el paso siguiente; hasta
--- entonces las operaciones devuelven el valor neutro de su tipo y la suite debe
--- fallar.
+-- Implementación completa: inserción ordenada sin duplicados, registro
+-- canónico enlazado y contadores propios.
 
 module DataStructuresAdvanced
   ( TreeNode(..)
@@ -54,7 +53,8 @@ module DataStructuresAdvanced
 
 import Prelude
 
-import Data.Maybe (Maybe(..))
+import Data.Array (index, insertAt, length)
+import Data.Maybe (Maybe(..), fromMaybe)
 
 data TreeNode = TreeNode
   { value :: Int
@@ -98,59 +98,145 @@ getRight (TreeNode node) = node.right
 
 -- Copia del nodo con el enlace izquierdo indicado (`set_left`).
 withLeft :: TreeNode -> Maybe TreeNode -> TreeNode
-withLeft node _ = node
+withLeft (TreeNode node) link = TreeNode node { left = link }
 
 -- Copia del nodo con el enlace derecho indicado (`set_right`).
 withRight :: TreeNode -> Maybe TreeNode -> TreeNode
-withRight node _ = node
+withRight (TreeNode node) link = TreeNode node { right = link }
 
 -- Árbol vacío utilizable: sin raíz y contador a cero (`init`).
 newBinaryTree :: BinaryTree
 newBinaryTree = BinaryTree { root: Nothing, count: 0 }
 
+type InsertResult = { node :: Maybe TreeNode, inserted :: Boolean }
+
+insertNode :: Int -> Maybe TreeNode -> InsertResult
+insertNode value Nothing = { node: Just (newTreeNode value), inserted: true }
+insertNode value (Just node@(TreeNode current))
+  | value == current.value = { node: Just node, inserted: false }
+  | value < current.value =
+      let result = insertNode value current.left
+      in { node: Just (withLeft node result.node), inserted: result.inserted }
+  | otherwise =
+      let result = insertNode value current.right
+      in { node: Just (withRight node result.node), inserted: result.inserted }
+
 -- Inserta el valor; un duplicado también es éxito y no crece el tamaño.
 insert :: Int -> BinaryTree -> BinaryTree
-insert _ tree = tree
+insert value (BinaryTree tree) =
+  let result = insertNode value tree.root
+  in BinaryTree
+    { root: result.node
+    , count: if result.inserted then tree.count + 1 else tree.count
+    }
 
 -- Pertenencia según la invariante del ABB.
 contains :: Int -> BinaryTree -> Boolean
-contains _ _ = false
+contains value (BinaryTree tree) = go tree.root
+  where
+  go Nothing = false
+  go (Just (TreeNode current))
+    | value == current.value = true
+    | value < current.value = go current.left
+    | otherwise = go current.right
 
 isTreeEmpty :: BinaryTree -> Boolean
-isTreeEmpty _ = false
+isTreeEmpty (BinaryTree tree) = tree.count == 0
 
 treeSize :: BinaryTree -> Int
-treeSize _ = 0
+treeSize (BinaryTree tree) = tree.count
 
 -- Grafo vacío utilizable: sin vértices y contadores a cero (`init`).
 newGraph :: Graph
 newGraph = Graph { vertices: Nothing, vertexCount: 0, edgeCount: 0 }
 
+findVertex :: Int -> Maybe GraphNode -> Maybe GraphNode
+findVertex _ Nothing = Nothing
+findVertex label (Just node@(GraphNode gn)) =
+  if gn.label == label then Just node
+  else findVertex label gn.nextVertex
+
 -- Registra el vértice; un duplicado también es éxito y conserva la adyacencia.
 addVertex :: Int -> Graph -> Graph
-addVertex _ graph = graph
+addVertex label (Graph g) =
+  case findVertex label g.vertices of
+    Just _ -> Graph g
+    Nothing ->
+      let
+        newVertex = GraphNode
+          { label: label, neighbors: [], nextVertex: g.vertices }
+      in Graph g { vertices = Just newVertex, vertexCount = g.vertexCount + 1 }
+
+-- Posición del primer vecino mayor que el valor nuevo; el final si no hay.
+positionFor :: Int -> Array Int -> Int
+positionFor value neighbors = go 0
+  where
+  go i
+    | i >= length neighbors = i
+    | otherwise = case index neighbors i of
+        Just current -> if current < value then go (i + 1) else i
+        Nothing -> i
+
+insertNeighbor :: Int -> Array Int -> Array Int
+insertNeighbor value neighbors =
+  fromMaybe neighbors (insertAt (positionFor value neighbors) value neighbors)
+
+hasNeighbor :: Int -> Array Int -> Boolean
+hasNeighbor value neighbors = go 0
+  where
+  go i
+    | i >= length neighbors = false
+    | otherwise = case index neighbors i of
+        Just current -> if current == value then true else go (i + 1)
+        Nothing -> false
+
+replaceNeighbors :: Int -> Array Int -> Maybe GraphNode -> Maybe GraphNode
+replaceNeighbors _ _ Nothing = Nothing
+replaceNeighbors label neighbors (Just (GraphNode gn)) =
+  if gn.label == label then
+    Just (GraphNode gn { neighbors = neighbors })
+  else
+    Just
+      (GraphNode gn
+        { nextVertex = replaceNeighbors label neighbors gn.nextVertex })
 
 -- Arista dirigida `from -> to`: el grafo resultante cuando se añade o ya
 -- estaba, y `Nothing` cuando falta un extremo.
 addEdge :: Int -> Int -> Graph -> Maybe Graph
-addEdge _ _ _ = Nothing
+addEdge from to (Graph g) =
+  case findVertex from g.vertices, findVertex to g.vertices of
+    Just (GraphNode source), Just _
+      | hasNeighbor to source.neighbors -> Just (Graph g)
+      | otherwise ->
+          let
+            updated = replaceNeighbors from
+              (insertNeighbor to source.neighbors)
+              g.vertices
+          in Just (Graph g { vertices = updated, edgeCount = g.edgeCount + 1 })
+    _, _ -> Nothing
 
 -- Verdadero si existe la arista dirigida `from -> to`.
 hasEdge :: Int -> Int -> Graph -> Boolean
-hasEdge _ _ _ = false
+hasEdge from to (Graph g) =
+  case findVertex from g.vertices of
+    Nothing -> false
+    Just (GraphNode source) -> hasNeighbor to source.neighbors
 
 -- Vecinos ordenados: `Nothing` si no está registrado,
 -- `Just []` si está aislado.
 getNeighbors :: Int -> Graph -> Maybe (Array Int)
-getNeighbors _ _ = Nothing
+getNeighbors label (Graph g) =
+  case findVertex label g.vertices of
+    Nothing -> Nothing
+    Just (GraphNode node) -> Just node.neighbors
 
 isGraphEmpty :: Graph -> Boolean
-isGraphEmpty _ = false
+isGraphEmpty (Graph g) = g.vertexCount == 0
 
 -- Número de vértices registrados.
 vertexCount :: Graph -> Int
-vertexCount _ = 0
+vertexCount (Graph g) = g.vertexCount
 
 -- Número de aristas registradas.
 edgeCount :: Graph -> Int
-edgeCount _ = 0
+edgeCount (Graph g) = g.edgeCount

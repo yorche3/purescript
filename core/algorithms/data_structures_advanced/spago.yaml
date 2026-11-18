@@ -1,6 +1,7 @@
 package:
   name: data-structures-advanced
   dependencies:
+    - arrays
     - console
     - effect
     - maybe
