@@ -1,0 +1,16 @@
+package:
+  name: data-structures-advanced
+  dependencies:
+    - arrays
+    - console
+    - effect
+    - maybe
+    - prelude
+  test:
+    main: Test.Main
+    dependencies:
+      - test-unit
+workspace:
+  packageSet:
+    registry: 82.0.1
+  extraPackages: {}

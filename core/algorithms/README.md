@@ -12,6 +12,7 @@ Los módulos de esta fase trabajan sobre **listas** (`Data.List`, tipo `List`), 
 |--------|---------------|---------|:-----:|:------:|
 | [`naive_sort/`](naive_sort/) | [05_Naive_Sort](https://yorche3.github.io/programming_languages/core/algorithms/05_Naive_Sort/) | `spago test` + test-unit | 3 | ✅ |
 | [`data_structures_basics/`](data_structures_basics/) | [06_Data_Structures_Basics](https://yorche3.github.io/programming_languages/core/algorithms/06_Data_Structures_Basics/) | `spago test` + test-unit | 5 | ✅ |
+| [`data_structures_advanced/`](data_structures_advanced/) | [07_Data_Structures_Advanced](https://yorche3.github.io/programming_languages/core/algorithms/07_Data_Structures_Advanced/) | `spago test` + test-unit | 24 | ✅ |
 
 ---
 
@@ -29,16 +30,27 @@ algorithms/
 │   │   ├── Main.purs                # Punto de entrada de las pruebas
 │   │   └── NaiveSortTests.purs      # 3 tests × 7 casos
 │   └── README.md
-└── data_structures_basics/          # 06_Data_Structures_Basics
+├── data_structures_basics/          # 06_Data_Structures_Basics
+│   ├── spago.yaml                   # Configuración de Spago
+│   ├── spago.lock                   # Resolución fijada del package set
+│   ├── .gitignore                   # Ignora output/, .spago/ y node_modules/
+│   ├── src/
+│   │   └── DataStructuresBasics.purs # Node, LinkedList, Stack, Queue
+│   ├── test/
+│   │   └── Test/
+│   │       ├── Main.purs            # Punto de entrada de las pruebas
+│   │       └── DataStructuresBasicsTests.purs # 5 tests × 15 casos
+│   └── README.md
+└── data_structures_advanced/        # 07_Data_Structures_Advanced
     ├── spago.yaml                   # Configuración de Spago
     ├── spago.lock                   # Resolución fijada del package set
     ├── .gitignore                   # Ignora output/, .spago/ y node_modules/
     ├── src/
-    │   └── DataStructuresBasics.purs # Node, LinkedList, Stack, Queue
+    │   └── DataStructuresAdvanced.purs # TreeNode, BinaryTree, GraphNode, Graph
     ├── test/
     │   └── Test/
     │       ├── Main.purs            # Punto de entrada de las pruebas
-    │       └── DataStructuresBasicsTests.purs # 5 tests × 15 casos
+    │       └── DataStructuresAdvancedTests.purs # 3 suites × 24 tests
     └── README.md
 ```
 
@@ -78,6 +90,10 @@ spago test
 
 # Data Structures Basics Tests
 cd data_structures_basics
+spago test
+
+# Data Structures Advanced Tests
+cd data_structures_advanced
 spago test
 ```
 
